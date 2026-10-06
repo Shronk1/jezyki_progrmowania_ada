@@ -1,46 +1,57 @@
 with Ada.Text_IO;
+with Ada.Numerics.Discrete_Random;
 
-procedure Modul_1 is
+procedure Module_1 is
 
-   type Dostawa is record
+   subtype Time_Range is Integer range 1 .. 8;
+   package Time_Random is new Ada.Numerics.Discrete_Random (Time_Range);
+
+   type Delivery is record
       Id : Integer;
-      Towar : Character;
-      Ilosc: Integer;
+      Item : Character;
+      Amount: Integer;
    end record;
 
-   task Stanowisko is
-      entry Przyjmij (D : Dostawa);
-   end Stanowisko;
+   task Station is
+      entry Accept_Delivery (D : Delivery);
+   end Station;
 
-   task type Samochod_Type (Id : Integer; Towar : Character; Ilosc : Integer; Opoznienie_Startu : Integer);
+   task type Truck_Type (Id : Integer; Item : Character; Amount : Integer);
 
-   task body Stanowisko is
+   task body Station is
    begin
       loop
-         accept Przyjmij (D : Dostawa) do
+         accept Accept_Delivery (D : Delivery) do
             Ada.Text_IO.Put_Line ("Rozpoczęto rozładunek D" & Integer'Image(D.Id)(2 .. Integer'Image(D.Id)'Last));
-            delay 6.0;
+            delay 2.0;
             Ada.Text_IO.Put_Line ("Zakończono rozładunek D" & Integer'Image(D.Id)(2 .. Integer'Image(D.Id)'Last));
-         end Przyjmij;
+         end Accept_Delivery;
       end loop;
-   end Stanowisko;
+   end Station;
 
-   task body Samochod_Type is
-      D : Dostawa;
+   task body Truck_Type is
+      D : Delivery;
+      Gen : Time_Random.Generator;
+      Random_Time : Time_Range;
    begin
-      delay Duration(Opoznienie_Startu);
+      Time_Random.Reset (Gen);
+      D := (Id => Id, Item => Item, Amount => Amount);
       
-      D := (Id => Id, Towar => Towar, Ilosc => Ilosc);
-      Ada.Text_IO.Put_Line ("Przyjazd samochodu D" & Integer'Image(Id)(2 .. Integer'Image(Id)'Last));
-      Ada.Text_IO.Put_Line ("D" & Integer'Image(Id)(2 .. Integer'Image(Id)'Last) & " oczekuje na rozładunek");
-      
-      Stanowisko.Przyjmij(D);
-   end Samochod_Type;
+      loop
+         Random_Time := Time_Random.Random (Gen);
+         delay Duration(Random_Time);
+         
+         Ada.Text_IO.Put_Line ("Przyjazd samochodu D" & Integer'Image(Id)(2 .. Integer'Image(Id)'Last));
+         Ada.Text_IO.Put_Line ("D" & Integer'Image(Id)(2 .. Integer'Image(Id)'Last) & " oczekuje na rozładunek");
+         
+         Station.Accept_Delivery(D);
+      end loop;
+   end Truck_Type;
 
-   Auto1 : Samochod_Type (1, 'A', 10, 1);
-   Auto2 : Samochod_Type (2, 'B', 15, 4);
-   Auto3 : Samochod_Type (3, 'C', 20, 7);
+   Truck1 : Truck_Type (1, 'A', 10);
+   Truck2 : Truck_Type (2, 'B', 15);
+   Truck3 : Truck_Type (3, 'C', 20);
 
 begin
    null;
-end Modul_1;
+end Module_1;
