@@ -1,7 +1,8 @@
 with Ada.Text_IO;
 with Ada.Numerics.Discrete_Random;
+with Test_Package;
 
-procedure Module_1 is
+procedure Main is
 
    subtype Time_Range is Integer range 1 .. 8;
    package Time_Random is new Ada.Numerics.Discrete_Random (Time_Range);
@@ -53,5 +54,5 @@ procedure Module_1 is
    Truck3 : Truck_Type (3, 'C', 20);
 
 begin
-   null;
-end Module_1;
+   Test_Package.Print;
+end Main;

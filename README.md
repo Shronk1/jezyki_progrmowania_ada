@@ -1,22 +1,26 @@
 # jezyki_progrmowania_ada
+
 How to open project?
-
-
 
 Linux:
 
-install gnatmake:
+before first run gprbuild is required:
 
 sudo apt update
-
 sudo apt install gnat gprbuild
 
-Run file modul_1.adb: 
+then to compile and open:
 
-gnatmake modul_1.adb
+gprbuild -P MM_logistics
+./bin/main
 
-./modul_1
+
+
 
 Windows:
 
 https://sppchoroszcz.med.pl/
+
+
+Want to add something? 
+Just throw files to files folder, no need to modify .gpr file!
