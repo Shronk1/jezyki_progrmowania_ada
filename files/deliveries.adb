@@ -14,8 +14,7 @@ package body Deliveries is
    begin
       Time_Random.Reset (Gen);
       D := (Id => Id, Item => Item, Amount => Amount);
-      
-      loop
+      for I in 1 .. 2 loop
          Random_Time := Time_Random.Random (Gen);
          delay Duration(Random_Time*2);
          
@@ -24,6 +23,7 @@ package body Deliveries is
          
          Station_Pkg.Station.Accept_Delivery(D);
       end loop;
+      Ada.Text_IO.Put_Line ("Samochód nr " & Integer'Image(Id)(2 .. Integer'Image(Id)'Last) & " dostarczył cały towar i zakończył pracę");
    end Truck_Type;
 
 end Deliveries;

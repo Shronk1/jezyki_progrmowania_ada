@@ -17,6 +17,7 @@ package body Station_Pkg is
          Current_Amount := D.Amount;
          end Accept_Delivery;
 
+-- Brygadzista nie lubi Mietka, więc zawsze gdy jest dostępny wpierw daje mu zadanie
          select
             Workers.Worker1.Transport (Current_Item, Current_Amount);
          else

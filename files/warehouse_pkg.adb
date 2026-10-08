@@ -7,9 +7,12 @@ package body Warehouse_Pkg is
       Count_P : Integer := 0;
       Count_L : Integer := 0;
       Count_T : Integer := 0;
+      Count_All : Integer := 0;
+      Storage_Limit : Integer := 100;
    begin
       loop
          accept Store_Item (Item : Character; Amount : Integer) do
+            Count_All := Count_All + Amount;
             if Item = 'P' then
                Count_P := Count_P + Amount;
             elsif Item = 'L' then
