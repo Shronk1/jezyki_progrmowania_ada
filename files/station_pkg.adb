@@ -9,19 +9,24 @@ package body Station_Pkg is
    Current_Amount : Integer;
    begin
       loop
-         accept Accept_Delivery (D : Delivery) do
-            Ada.Text_IO.Put_Line ("Rozpoczęto rozładunek samochodu nr " & Integer'Image(D.Id)(2 .. Integer'Image(D.Id)'Last)&" (Towar: " & Translations.Get_Item_Name(D.Item) & ")");
-            delay 2.0;
-            Ada.Text_IO.Put_Line ("Zakończono rozładunek samochodu nr " & Integer'Image(D.Id)(2 .. Integer'Image(D.Id)'Last));
-         Current_Item := D.Item;
-         Current_Amount := D.Amount;
-         end Accept_Delivery;
-
--- Brygadzista nie lubi Mietka, więc zawsze gdy jest dostępny wpierw daje mu zadanie
          select
-            Workers.Worker1.Transport (Current_Item, Current_Amount);
-         else
-            Workers.Worker2.Transport (Current_Item, Current_Amount);
+            accept Accept_Delivery (D : Delivery) do
+               Ada.Text_IO.Put_Line ("Rozpoczęto rozładunek samochodu nr " & Integer'Image(D.Id)(2 .. Integer'Image(D.Id)'Last)&" (Towar: " & Translations.Get_Item_Name(D.Item) & ")");
+               delay 2.0;
+               Ada.Text_IO.Put_Line ("Zakończono rozładunek samochodu nr " & Integer'Image(D.Id)(2 .. Integer'Image(D.Id)'Last));
+            Current_Item := D.Item;
+            Current_Amount := D.Amount;
+            end Accept_Delivery;
+
+            select
+               Workers.Worker1.Transport (Current_Item, Current_Amount);
+            else
+               Workers.Worker2.Transport (Current_Item, Current_Amount);
+            end select;
+         or
+            delay 20.0;
+               Ada.Text_IO.Put_Line ("Zakończono pracę stacji - akumulator się wyładował z nieaktywności");
+            exit;
          end select;
       end loop;
    end Station;

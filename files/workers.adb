@@ -28,8 +28,8 @@ package body Workers is
             
             Ada.Text_IO.Put_Line (Translations.Get_Worker_Name(Id) & " wrócił i oczekuje na pracę.");
          or
-            delay 15.0;
-            Ada.Text_IO.Put_Line (Translations.Get_Worker_Name(Id) & " znudził się czekaniem i poszedł do domu.");
+            delay 20.0;
+            Ada.Text_IO.Put_Line (Translations.Get_Worker_Name(Id) & " zasnął podczas czekania i zakończył pracę.");
             exit;
          end select;
       end loop;

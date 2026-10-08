@@ -4,7 +4,7 @@ with Station_Pkg;
 
 package body Deliveries is
 
-   subtype Time_Range is Integer range 1 .. 8;
+   subtype Time_Range is Integer range 5 .. 17;
    package Time_Random is new Ada.Numerics.Discrete_Random (Time_Range);
 
    task body Truck_Type is
@@ -16,14 +16,19 @@ package body Deliveries is
       D := (Id => Id, Item => Item, Amount => Amount);
       for I in 1 .. 2 loop
          Random_Time := Time_Random.Random (Gen);
-         delay Duration(Random_Time*2);
+         delay Duration(Random_Time);
          
          Ada.Text_IO.Put_Line ("Przyjazd samochodu nr " & Integer'Image(Id)(2 .. Integer'Image(Id)'Last));
          Ada.Text_IO.Put_Line ("Samochód nr " & Integer'Image(Id)(2 .. Integer'Image(Id)'Last) & " oczekuje na rozładunek");
-         
-         Station_Pkg.Station.Accept_Delivery(D);
+         select
+            Station_Pkg.Station.Accept_Delivery(D);
+         or
+            delay 20.0;
+            Ada.Text_IO.Put_Line ("Samochód nr " & Integer'Image(Id)(2 .. Integer'Image(Id)'Last) & " znudził się czekaniem i odjechał w siną dal");
+            exit;
+         end select;
       end loop;
-      Ada.Text_IO.Put_Line ("Samochód nr " & Integer'Image(Id)(2 .. Integer'Image(Id)'Last) & " dostarczył cały towar i zakończył pracę");
+      Ada.Text_IO.Put_Line ("Samochód nr " & Integer'Image(Id)(2 .. Integer'Image(Id)'Last) & " zakończył pracę");
    end Truck_Type;
 
 end Deliveries;
