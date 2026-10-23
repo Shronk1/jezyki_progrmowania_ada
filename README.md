@@ -6,13 +6,16 @@ Moduł 1: Dostawy i rozładunek 2 ZROBIONE
  
 Moduł 2: Roboty transportowe  2 ZROBIONE
 
-Moduł 3: Magazyn 2 PRAWIE zrobione (sprawdzenie aktualnego stanu do dodania jako spotkanie)
+Moduł 3: Magazyn 2 ZROBIONE (przyjęcie towaru, stan zapełnienia, sprawdzenie aktualnego stanu Check_Storage)
 
-3 wybrane moduły dodatkowe 4,5 NIE zrobione
+3 wybrane moduły dodatkowe 4,5:
+- Moduł A: Zamówienia klientów (ZROBIONE)
+- Moduł dodatkowy 2 (do wyboru)
+- Moduł dodatkowy 3 (do wyboru)
 
 Integracja i współbieżność  1,5 (...)
 
-3 różne konstrukcje select i min 1 dozór  2 (1/3 select w workers.adb 0/1 dozór)
+3 różne konstrukcje select i min 1 dozór  2 (użyte: selective accept, conditional call, timed call, dozór when w Warehouse)
 
 Jakość programu i prezentacja 1 
 
@@ -71,6 +74,10 @@ Workers (workers.ads/adb):
 
 Warehouse_Pkg (warehouse_pkg.ads/adb):
 
-    Warehouse: The final storage destination that accepts goods and maintains an independent state (inventory counters) for all three item types.
+    Warehouse: The final storage destination that accepts goods, fulfills client orders (Moduł A), and maintains an independent state (inventory counters) for all three item types.
 
-Main (main.adb): The entry point of the program that starts the simulation by initializing three trucks with different item types and amounts.
+Orders (orders.ads/adb):
+
+    Order_Type: Simulates client orders appearing in the system (Moduł A). Each order has an ID, item type, and quantity. Communicates with Warehouse to receive items, waiting and retrying if stock is currently insufficient.
+
+Main (main.adb): The entry point of the program that starts the simulation by initializing delivery trucks and customer orders.
