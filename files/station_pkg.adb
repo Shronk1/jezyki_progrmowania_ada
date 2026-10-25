@@ -11,9 +11,9 @@ package body Station_Pkg is
       loop
          select
             accept Accept_Delivery (D : Delivery) do
-               Ada.Text_IO.Put_Line ("Rozpoczęto rozładunek samochodu nr " & Integer'Image(D.Id)(2 .. Integer'Image(D.Id)'Last)&" (Towar: " & Translations.Get_Item_Name(D.Item) & ")");
+               Ada.Text_IO.Put_Line ("[Stacja] Rozpoczęto rozładunek samochodu nr " & Integer'Image(D.Id)(2 .. Integer'Image(D.Id)'Last)&" (Towar: " & Translations.Get_Item_Name(D.Item) & ")");
                delay 2.0;
-               Ada.Text_IO.Put_Line ("Zakończono rozładunek samochodu nr " & Integer'Image(D.Id)(2 .. Integer'Image(D.Id)'Last));
+               Ada.Text_IO.Put_Line ("[Stacja] Zakończono rozładunek samochodu nr " & Integer'Image(D.Id)(2 .. Integer'Image(D.Id)'Last));
             Current_Item := D.Item;
             Current_Amount := D.Amount;
             end Accept_Delivery;
@@ -25,7 +25,7 @@ package body Station_Pkg is
             end select;
          or
             delay 20.0;
-               Ada.Text_IO.Put_Line ("Zakończono pracę stacji - akumulator się wyładował z nieaktywności");
+               Ada.Text_IO.Put_Line ("[Stacja] Zakończono pracę stacji - akumulator się wyładował z nieaktywności");
             exit;
          end select;
       end loop;
