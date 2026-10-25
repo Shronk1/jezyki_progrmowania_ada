@@ -1,16 +1,16 @@
 with Ada.Text_IO;
 with Translations;
 with Warehouse_Pkg;
+with Coffee;
 
 package body Workers is
 
    task body Worker_Type is
       Current_Item : Character;
       Current_Amount : Integer;
+      Caffeine_Level : Integer := 100;
    begin
       loop
-      -- W przykładzie mamy roboty a tu pracowników, więc zamiast stacji ładującej
-      -- możemy zastosować ekspres do kawy, i poziom kofeiny jako energię pracowników
          select
             accept Transport (Item : Character; Amount : Integer) do
                Ada.Text_IO.Put_Line (Translations.Get_Worker_Name(Id) & " odebrał polecenie transportu.");
@@ -19,12 +19,19 @@ package body Workers is
             end Transport;
          
             Ada.Text_IO.Put_Line (Translations.Get_Worker_Name(Id) & " idzie do magazynu...");
-            delay 3.0;
+            delay 2.5;
             
             Warehouse_Pkg.Warehouse.Store_Item (Current_Item, Current_Amount);
-            Ada.Text_IO.Put_Line (Translations.Get_Worker_Name(Id) & " przekazał towar i wraca na stację...");
+            Caffeine_Level := Caffeine_Level - 60;
+            Ada.Text_IO.Put_Line (Translations.Get_Worker_Name(Id) & " przekazał towar i wraca na stację... (Poziom kofeiny:" & Integer'Image(Caffeine_Level) & "%)");
             
-            delay 3.0;
+            if Caffeine_Level < 50 then
+               Ada.Text_IO.Put_Line (Translations.Get_Worker_Name(Id) & " opadł z sił i idzie do ekspresu po kawę.");
+               Coffee.Machine.Make_Coffee (Id);
+               Caffeine_Level := 100;
+            end if;
+
+            delay 2.5;
             
             Ada.Text_IO.Put_Line (Translations.Get_Worker_Name(Id) & " wrócił i oczekuje na pracę.");
          or
